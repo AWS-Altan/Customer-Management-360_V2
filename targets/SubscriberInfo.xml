@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="SubscriberInfo">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204") OR (error.header.FaultHeader = "ExceptionImeiNotFoundInInfoByTac")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError400")</Condition>
+                <Name>AM-ErrorMesaggeProfile400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError500")</Condition>
+                <Name>AM-ErrorMessageProfile500</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "HSSError")</Condition>
+                <Name>AM-ProfileHssError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PcrfHssError")</Condition>
+                <Name>AM-ErrorMessagePcrfHss</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "UpdateApn400")</Condition>
+                <Name>AM-ErrorMessageUpdateApn400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError400")</Condition>
+                <Name>AM-ErrorMesaggeValidate400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ExceptionGetAdjustmentMb")</Condition>
+                <Name>AM-ErrorMessageGetAdjustmentMb</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-Request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="profile">
+            <Description>Operación que permite consultar el perfil de un suscriptor asociado a un msisdn</Description>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestProfile360</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code = "404"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "404"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-ProfileResponse</Name>
+                    <Condition>response.status.code = "400" OR response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-Response400</Name>
+                    <Condition>response.status.code = "400"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-CheckPromotionBonus</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetResponseProfile</Name>
+                </Step>
+                <Step>
+                    <Name>FC-QueryPurchasedPrimaryOffering</Name>
+                    <Condition>isUnknownProduct = 'true'</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-setPrimaryOfferToCatalogOffering</Name>
+                    <Condition>isUnknownProduct = 'true'</Condition>
+                    <!--and responsePrimaryOffering.returnCode = '0000' and responsePrimaryOffering.returnMsg = 'Success'-->
+                </Step>
+                <Step>
+                    <Name>FC-GetOfferingDetailByCatalogOffers</Name>
+                    <Condition>isUnknownProduct = 'true'</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-SetProductIfOfferProductIsUnknown</Name>
+                    <Condition>isUnknownProduct = 'true'</Condition>
+                    <!-- and responseGetODCO != '' -->
+                </Step>
+                <Step>
+                    <Name>FC-AdjustmentMb</Name>
+                </Step>
+                <Step>
+                    <Name>FC-CreateResponseProfile360V2</Name>
+                    <Condition>profile360Version = 2 or profile360Version = 3</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-CreateResponseProfile360V3</Name>
+                    <Condition>profile360Version = 2 or profile360Version = 3</Condition>
+                    <!--<Condition>profile360Version = 3</Condition>-->
+                </Step>
+                <Step>
+                    <Name>AM-Profle360Response</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/profile") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="identifierSubscriber">
+            <Description>Operación que permite identificar al suscriptor</Description>
+            <Request>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestIdentifierSubscriber</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataIdentifierSubscriberIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataIdentifierSubscriptorOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-IdentifierSubscriberResponse</Name>
+                    <Condition>response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-IdentifierResponse</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-IdentifierResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/search") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="validatePreactive">
+            <Description>Operación que permite verificar si un Usuario Final se encuentra en estado preactivo</Description>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestValidatePreactive</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataValidatePreactiveIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataValidatePreactiveOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/validatePreactive") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="getSubscriberByImsi">
+            <Description>Operación que permite obtener un suscriptor por su imsi</Description>
+            <Request>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestgetSubscriberByImsi</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataGetSubscriberByImsiIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataGetSubscriberByImsiOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204" OR response.status.code = "404"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-GetSubscriberByImsiResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/getSubscriberByImsi") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="validateApnByClient">
+            <Description>Operación que permite verificar el apn de un suario final</Description>
+            <Request>
+                <Step>
+                    <Name>AM-ValidateApnByClient</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataValidateApnIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>JS-EvaluateTargetResponse</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataValidateApnClientOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse400</Name>
+                    <Condition>response.status.code = "400"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204" AND response.status.code != "400"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/validateApnByClient") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="updatenetwork">
+            <Description>Recurso que obtiene la saturación de sitios por los que se ha conectado un Usuario Final.</Description>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestCampaignOTA</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorRefresNetworkIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>JS-RemovePathSuffix</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorRefresNetworkOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscriber/{idSubscriber}/refreshnetwork") and (request.verb = "POST")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="PY-MS-SUBSCRIBER"/>
+            <!--Server name="PY-MS-SUBSCRIBER_2"/> -->
+            <!--<Server name="PY-MS-SUBSCRIBER-FROM-RXPX"/> SERVER DE RESERVA -->
+        </LoadBalancer>
+        <Path>/prod/{flow.mds.operationpath}</Path>
+        <!--<Path>/{flow.mds.operationpath}</Path> PATH DE RESERVA -->
+        <Properties>
+            <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
+        </Properties>
+    </HTTPTargetConnection>
+</TargetEndpoint>

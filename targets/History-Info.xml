@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="History-Info">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError400")</Condition>
+                <Name>AM-ErrorMesaggeProfile400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError500")</Condition>
+                <Name>AM-ErrorMessageProfile500</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "HSSError")</Condition>
+                <Name>AM-ProfileHssError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PcrfHssError")</Condition>
+                <Name>AM-ErrorMessagePcrfHss</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "UpdateApn400")</Condition>
+                <Name>AM-ErrorMessageUpdateApn400</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-Request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="recordOperations">
+            <Description>Operación que permite consultar el historial de operaciones de un Usuario Final</Description>
+            <Request>
+                <Step>
+                    <Name>AM-RequestOperations</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataOperationsIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataOperationsOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordOperations") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordSimCards">
+            <Description>Operación que permite consultar los cambios de SIM Card realizados por el usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestSimCardsRecord</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataSimCardsIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataSimCardsOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204" OR response.status.code = "404"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204" AND response.status.code != "404"</Condition>
+                </Step>
+                <!--Step>
+                    <Name>AM-RecordSIM</Name>
+                </Step-->
+                <Step>
+                    <Name>AM-RecordSIM</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordSimCards") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordOfferings">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-RequestOfferings</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataOfferingsIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataOfferingsOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordOfferings") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordImeis">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-RequestImeis</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataImeisIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SetAuditorDataImeisOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordImeis") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordStatus">
+            <Description>Política que muestra el historial de estados de un suscriptor final.</Description>
+            <Request>
+                <Step>
+                    <Name>AM-RequestStatus</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDataStatusIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorDataStatusOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordStatus") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordConsumptions">
+            <Description>Recurso que muestra el historial de consumos de un usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>AM-RequestConsumptions</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDataConsumptionsIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorDataConsumptionsOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordConsumptions") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="PY-MS-SUBSCRIBER-HIST-INFO"/>
+        </LoadBalancer>
+        <Path>/Prod/{flow.mds.operationpath}</Path>
+        <Properties>
+            <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
+        </Properties>
+    </HTTPTargetConnection>
+</TargetEndpoint>

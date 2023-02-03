@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="Offerings">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError400")</Condition>
+                <Name>AM-ErrorMesaggeProfile400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError500")</Condition>
+                <Name>AM-ErrorMessageProfile500</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "HSSError")</Condition>
+                <Name>AM-ProfileHssError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PcrfHssError")</Condition>
+                <Name>AM-ErrorMessagePcrfHss</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "UpdateApn400")</Condition>
+                <Name>AM-ErrorMessageUpdateApn400</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-Request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="mvnoOffers">
+            <Description>Operación que devuelve el catálogo de ofertas por mvno</Description>
+            <Request>
+                <Step>
+                    <Name>EV-RequestMvnoOffers</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateOfferingNull</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestMvnoOffers</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataRequestMvnoOffers</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>AM-DeleteHeaderOfferingNull</Name>
+                    <Condition>(offeringId == "") OR (offeringId is null)</Condition>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataResponseMvnoOffers</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/mvno/{partnerId}/offers") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="APIGW_OFFERING_V"/>
+            <Server name="APIGW_OFFERING_O"/>
+        </LoadBalancer>
+        <Path>/prod/{flow.mds.operationpath}</Path>
+        <!--<Path>/py-ms-offerings/{flow.mds.operationpath}</Path> -->
+        <Properties>
+            <Property name="response.streaming.enabled">true</Property>
+            <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
+        </Properties>
+        <!--<URL>http://18.207.12.184:38086/{flow.mds.operationpath}</URL> URL DE RESERVA-->
+    </HTTPTargetConnection>
+</TargetEndpoint>

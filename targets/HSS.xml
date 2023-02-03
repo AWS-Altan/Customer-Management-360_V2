@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="HSS">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "HSSError")</Condition>
+                <Name>AM-ProfileHssError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PcrfHssError")</Condition>
+                <Name>AM-ErrorMessagePcrfHss</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PartnerIdError")</Condition>
+                <Name>AM-ErrorMessageBeId</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "LastCoverageError")</Condition>
+                <Name>AM-ErrorMessageLastCoverage</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateMsisdnVsBeIdErrorNonContent")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PCRFError")</Condition>
+                <Name>AM-ProfilePcrfError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ExceptionMsisdnNotFoundInHssAffirmed")</Condition>
+                <Name>AM-ErrorMessageMsisdnNotFoundInHssAffirmed</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-Request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="profileHss">
+            <Description>Operación que sirve para obtener los perfiles de los nodos de red HSS y PCRF</Description>
+            <Request>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>XTJ-RequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHssIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>XSL-RemoveEmptyNodes</Name>
+                </Step>
+                <Step>
+                    <Name>JS-RemoveEmptySpaces</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>XTJ-TargetResponse</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHssOUT</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-ResponseQueryProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ErrorProfileHSS</Name>
+                    <Condition>rspHSS.result != "success" and producto != "HBB"</Condition>
+                </Step>
+                <!--<Step>
+                    <Name>FC-GetProfilePCRF</Name>
+                </Step>-->
+                <!--<Step>
+                    <Name>RF-PCRFError</Name>
+                    <Condition>rspPCRF.result != "success" and producto != "HBB"</Condition>
+                </Step>-->
+                <!--Se comenta para omitir comprobación-->
+                <Step>
+                    <Name>JS-ResponseObjectProfile</Name>
+                    <!--<Condition>(rspHSS.result == "success" and rspPCRF.result == "success")</Condition>-->
+                </Step>
+                <!--<Step>
+                    <Name>JS-ResponseObjectNull</Name>
+                    <Condition>(rspHSS.result != "success" or rspPCRF.result != "success") and producto == "HBB"</Condition>
+                </Step>-->
+                <Step>
+                    <Name>JS-ResponseObjectNull</Name>
+                    <Condition>(rspHSS.result != "success") and producto == "HBB"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-GetProfileHssAffirmed</Name>
+                    <Condition>producto == "HBB"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ResponseObjectAffirmed</Name>
+                    <Condition>producto == "HBB" and responseGetProfileHssAffirmed.status.code = 200</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-ResponseProfileHss</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/profileHss") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="lastCoverage">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-SetIdentifierLastCoverage</Name>
+                    <Condition>semaforo != 1</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-IdentifySubscriber</Name>
+                    <Condition>semaforo != 1</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-PartnerIdError</Name>
+                    <Condition>(semaforo != 1) and (PartnerId != beidresponse)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>XTJ-RequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHssIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>XSL-RemoveEmptyNodes</Name>
+                </Step>
+                <Step>
+                    <Name>JS-RemoveEmptySpaces</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>XTJ-TargetResponse</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHssOUT</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-ResponseQueryProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ErrorProfileHSS</Name>
+                    <Condition>rspHSS.result != "success"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-LastCoverageResponse</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ErrorLastCoverage</Name>
+                    <Condition>(lastCoverageError == "true")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-ResponseLastCoverage</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/lastCoverage") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="HSS_APIGW"/>
+            <RetryEnabled>true</RetryEnabled>
+        </LoadBalancer>
+        <Path>/prod/{flow.hss.operationpath}</Path>
+    </HTTPTargetConnection>
+</TargetEndpoint>

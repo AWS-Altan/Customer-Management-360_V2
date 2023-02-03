@@ -1,0 +1,1704 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ExpiredAccessToken">
+            <Condition>(fault.name = "access_token_expired")</Condition>
+            <Step>
+                <Name>AM-ErrorMessageAccessTokenExpired</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="InvalidAccessToken">
+            <Condition>(fault.name = "invalid_access_token" OR fault.name = "InvalidAccessToken" OR fault.name = "Invalid Access Token" OR fault.name = "InvalidAPICallAsNoApiProductMatchFound")</Condition>
+            <Step>
+                <Name>AM-ErrorMessageAccessTokenInvalid</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="ThreatDetected">
+            <Condition>(fault.name = "ThreatDetected")</Condition>
+            <Step>
+                <Name>AM-ErrorMessageVerifyParams</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="RequestTooLarge">
+            <Condition>(fault.name = "TooBigBody")</Condition>
+            <Step>
+                <Name>AM-ErrorMessageVerifyParams</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SourceMessageNotAvailable">
+            <Condition>(fault.name = "SourceMessageNotAvailable")</Condition>
+            <Step>
+                <Name>AM-SourceMessageNotAvailable</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="IPDeniedAccess">
+            <Condition>(fault.name Matches "IPDeniedAccess") </Condition>
+            <Step>
+                <Name>AM-IPDeniedAccess</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ParamsError") OR (error.header.FaultHeader = "ErrorQueryParam")</Condition>
+                <Name>AM-ErrorMessageVerifyParams</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "LastCoverageError")</Condition>
+                <Name>AM-ErrorMessageLastCoverage</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "VerbError")</Condition>
+                <Name>AM-ErrorMessageVerbError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidatorError")</Condition>
+                <Name>AM-ErrorMessageValidatorError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ContentTypeError")</Condition>
+                <Name>AM-ErrorMessageContentType</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ErrorOfferingNull")</Condition>
+                <Name>AM-ErrorMessageErrorOfferingNull</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PartnerIdError")</Condition>
+                <Name>AM-ErrorMessagePartnerId</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateMsisdnVsBeIdErrorNonContent")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ReportRecordError")</Condition>
+                <Name>AM-ErrorMessageReportRecord</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "AuthorizationError")</Condition>
+                <Name>AM-ErrorMessageUnauthorized</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ContenTypeVerbGet")</Condition>
+                <Name>AM-ErrorMessageContentTypeGet</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PCRFError")</Condition>
+                <Name>AM-ProfilePcrfError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateBeIdError")</Condition>
+                <Name>AM-ErrorMessageIncorrectBeId</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ExceptionUpdateApnAdditionalControls")</Condition>
+                <Name>AM-ExceptionUpdateApnAdditionalControls</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+        <Step>
+            <Name>FC-AuditorServiceResource</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>FC-Security</Name>
+            </Step>
+            <Step>
+                <Name>EV-PathVariablesRequest</Name>
+            </Step>
+            <Step>
+                <Name>FC-AuditorServiceResource</Name>
+            </Step>
+            <Step>
+                <Name>FC-ValidateRequestHeaders</Name>
+            </Step>
+            <Step>
+                <Name>AC-SecurityIP</Name>
+            </Step>
+            <Step>
+                <Name>RF-ValidateContentTypeGet</Name>
+                <Condition>(request.verb = "GET") and (request.header.Content-Type != null)</Condition>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>SC-ReportBeId</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Name>FC-AuditorServiceResource</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <Flows>
+        <Flow name="profile">
+            <Description>Operación que permite consultar el perfil de un subscriptor asociado a un msisdn</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(msisdn is null) OR (msisdn = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSubscribers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/profile") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="profileHss">
+            <Description>Operación que sirve para obtener los perfiles de los nodos de red HSS y PCRF</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>FC-QueryPurchasedPrimaryOffering</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetIdentifierProfileHPE</Name>
+                </Step>
+                <Step>
+                    <Name>FC-IdentifySubscriber</Name>
+                </Step>
+                <Step>
+                    <Name>setImsiFromRangeHPE</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ValidateIfMsisdnImsiExistsInHPE</Name>
+                    <Condition>(imsi != "" and imsi != null)</Condition>
+                </Step>
+                <Step>
+                    <Name>validateResponseProfileHPE</Name>
+                    <Condition>(imsi != "" and imsi != null )</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XTJ-RequestMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataMnpNokiaIN</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XSL-RemoveEmptyNodesMnp</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-RemoveEmptySpaces</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHSS</Name>
+                    <Condition>(responseFromRangeHPE != "imsi_found") or (responseIfExistsInHPE.responseData != "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetNoRoute</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>SC-GetMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XTJ-ResponseMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-ResponseMnp</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHpeIN</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <!--<Step>
+                    <Name>FC-GetProfilePCRF</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>-->
+                <Step>
+                    <Name>FC-GetProfileHssHPE</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <Step>
+                    <Name>KVM-HPE_APN_LOOKUP</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <Step>
+                    <Name>ResponseObjectProfileHPE</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) and isValidResponse=="true"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHpeOUT</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) and isValidResponse == "true"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ResponseObjectProfile</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) and isValidResponse != "true"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-ResponseProfileHss</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/profileHss") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="identifierSubscriber">
+            <Description>Operación que permite identificar al suscriptor</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null) OR (identifierType is null) OR (identifierValue is null) OR (identifierType = "") OR (identifierValue = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateIdentifier</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateIdentifier</Name>
+                    <Condition>isIdentifierValid = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetIdentifySubscriber</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/search") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="validateOfferServiceability">
+            <Description>Permite validar la serviciabilidad de una oferta primaria</Description>
+            <Request>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(validateRequest == "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-ValidateOfferServiceability</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateOfferServiceability</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateOfferServiceabilityError</Name>
+                    <Condition>(continue == "error")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetNotTarget</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-ValidateServiceabilityResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/offerings/validateServiceability") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="validateFutureFiff">
+            <Description>Operación que permite validar si la oferta cuenta con la configuración de FIFF</Description>
+            <Request>
+                <Step>
+                    <Name>SA-LimitCountingDefault</Name>
+                </Step>
+                <Step>
+                    <Name>SA-LimitCountingCompany</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(validateRequest == "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestValidateFiff</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-CatalogOffering</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ErrorOfferingNull</Name>
+                    <Condition>(offeringIdFiff == "") OR (offeringIdFiff is null) OR (offeringIdFiff is 'undefined')</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateOfferingFiff</Name>
+                </Step>
+                <Step>
+                    <Name>AM-SetNotTarget</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-ResponseValidateFiff</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/offerings/validateFeatureFiff") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="mvnoOffers">
+            <Description>Operación que devuelve el catálogo de ofertas por mvno</Description>
+            <Request>
+                <Step>
+                    <Name>RF-PartnerIdError</Name>
+                    <Condition>(partnerId == "") OR (partnerId is null) OR (partnerId is 'undefined')</Condition>
+                </Step>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestMvnoOffers</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetOfferings</Name>
+                    <Condition>(offeringId = "") or (offeringId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetEndPointNoRoutes</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null)</Condition>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>FC-ConsultingOffer</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null)</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-SetOfferResponseData</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null)</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null) and response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null) and response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>(offeringId != "") and (offeringId IsNot null) and response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/mvno/{partnerId}/offers") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordOperations">
+            <Description>Operación que permite consultar el historial de operaciones de un Usuario Final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordOperations") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="validatePreactive">
+            <Description>Operación que permite verificar si un Usuario Final se encuentra en estado preactivo</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(validateRequest == "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePreactive</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateIdentifier</Name>
+                    <Condition>isIdentifierValid = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSubscribers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/validatePreactive") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="recordSimCards">
+            <Description>Operación que permite consultar los cambios de SIM Card realizados por el usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateOffserAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateOffset</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordSimCards") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordOfferings">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateOffserAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateOffset</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordOfferings") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordStatus">
+            <Description>Política que obtiene el historial de estados de un usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordStatus") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordImeis">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordImeis") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordConsumptions">
+            <Description>Recurso que muestra el historial de consumos de un usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (msisdn is null) OR (page is null) OR (limit is null) OR (reportMode = "") OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHistory</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordConsumptions") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="recordActionsByMobility">
+            <Description>Recurso que muestra las suspensiones y reanudaciones efectuadas sobre un MSISDN por control de movilidad</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(reportMode is null) OR (reportMode = "") OR (msisdn is null) OR (page is null) OR (limit is null) OR (msisdn = "") OR (page = "") OR (limit = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ReportRecord</Name>
+                    <!--<Name>JS-ValidateDateMobilityActions</Name>-->
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetActionsByMobility</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/recordActionsByMobility") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Device Information">
+            <Description>Recurso que muestra informacion del dispositivo</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> ((identifierType is null) OR (identifierType = "") OR (identifierValue is null) OR (identifierValue = "")) OR (identifierType != "msisdn" AND identifierType != "imei") OR ( !(version is null) AND (version != "1" AND  version != "2" AND version != "3") )</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateIdentifierDeviceInfo</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateIdentifier</Name>
+                    <Condition>isIdentifierValid = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetDeviceInformation</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/getDeviceInformation") and (request.verb = "GET")</Condition>
+        </Flow>
+        <!--Flow name="validateBand28">
+            <Description>Recurso que valida si un dispositivo es compatible con banda 28</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathBand28Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> (imei is null) OR (imei = "") </Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/imei/{imei}/validateBand28") and (request.verb = "GET")</Condition>
+        </Flow-->
+        <Flow name="lastCoverage">
+            <Description>Determina la última cobertura del UF en base al perfil del HSS</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestProfileHss</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetIdentifierProfileHPE</Name>
+                </Step>
+                <Step>
+                    <Name>FC-IdentifySubscriber</Name>
+                </Step>
+                <Step>
+                    <Name>setImsiFromRangeHPE</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ValidateIfMsisdnImsiExistsInHPE</Name>
+                    <Condition>(imsi != "" and imsi != null)</Condition>
+                </Step>
+                <Step>
+                    <Name>validateResponseProfileHPE</Name>
+                    <Condition>(imsi != "" and imsi != null )</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-BuildRequestMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XTJ-RequestMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataMnpNokiaIN</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XSL-RemoveEmptyNodesMnp</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-RemoveEmptySpaces</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetHSS</Name>
+                    <Condition>(responseFromRangeHPE != "imsi_found") or (responseIfExistsInHPE.responseData != "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetNoRoute</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>SC-GetMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>XTJ-ResponseMnpNokia</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-ResponseMnp</Name>
+                    <Condition>(responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found") </Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHpeIN</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) </Condition>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) </Condition>
+                </Step>
+                <Step>
+                    <Name>FC-GetProfileHssHPE</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) </Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ResponseObjectLastCoverageHPE</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found")) </Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ErrorLastCoverage</Name>
+                    <Condition>(lastCoverageError == "true")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetAuditorDataProfileHpeOUT</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-ResponseLastCoverage</Name>
+                    <Condition>((responseFromRangeHPE == "imsi_found") or (responseIfExistsInHPE.responseData == "imsi_found"))</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/lastCoverage") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="updateApn">
+            <Description>Actualiza el APN del dispositivo de un usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(msisdn is null) OR (msisdn = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>KVM-ScenarioID</Name>
+                </Step>
+                <Step>
+                    <Name>KVM-DefaultScenarioID</Name>
+                    <Condition>(scenarioId = "") OR (scenarioId is null)</Condition>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/apn") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="getSpeed72hrs">
+            <Description>Recurso que obtiene las políticas y velocidad de un subscriptor de 72 horas atrás.</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-requestSpeed</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> ((imsi is null) OR (imsi = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetKpis360</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/imsi/{imsi}/getSpeed72h") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="getKpisTs">
+            <Description>Recurso que obtiene el último KPI Ts.</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-requestSpeed</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> ((imsi is null) OR (imsi = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetKpis360</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/imsi/{imsi}/getKpisTs") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="getBusyHour72hrs">
+            <Description>Recurso que obtiene la saturación de sitios por los que se ha conectado un Usuario Final.</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-requestSpeed</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> ((imsi is null) OR (imsi = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetKpis360</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/imsi/{imsi}/getBusyHour") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="updatenetwork">
+            <Description>El API actualiza la red preferente de un Usuario Final a través de la OTA.</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>AE-GetAppInfo</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestUpdateNet</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> (( msisdn is null) OR (msisdn = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>KVM-OtaRefresh</Name>
+                </Step>
+                <Step>
+                    <Name>RF-NoOTA</Name>
+                    <Condition> (( OTACommand is null) OR (OTACommand = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSubscribers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscriber/{idSubscriber}/refreshnetwork") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="updateApn">
+            <Description>Actualiza el APN del dispositivo de un usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(msisdn is null) OR (msisdn = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>KVM-ScenarioID</Name>
+                </Step>
+                <Step>
+                    <Name>KVM-DefaultScenarioID</Name>
+                    <Condition>(scenarioId = "") OR (scenarioId is null)</Condition>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/apn") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="getSubscriberByImsi">
+            <Description>Operación que permite obtener un suscriptor por su imsi</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSubscribers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/getSubscriberByImsi") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="validateApnByClient">
+            <Description>Operación que permite verificar el apn del usuario final</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(validateRequest == "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>msisdn is null</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSubscribers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/validateApnByClient") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="ConsumptionsIoT">
+            <Description>Muestra los consumos de IoT</Description>
+            <Request>
+                <Step>
+                    <Name>AM-RemoveContentTypeHeader</Name>
+                </Step>
+                <Step>
+                    <Name>RF-IncorrectBE</Name>
+                    <Condition>mvno != PartnerId</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetConsumptionsIoTEndpoint</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/mvnos/{mvno}/recordIoT") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="apnUpdate">
+            <Description>Actualiza el APN del dispositivo de un usuario</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(msisdn is null) OR (msisdn = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>KVM-DevAppsInternal</Name>
+                </Step>
+                <Step>
+                    <Name>FC-UpdateApnAdditionalControls</Name>
+                    <Condition>(DevAppsInternas = '') AND ((msisdn != null) OR (msisdn != ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetAPN</Name>
+                    <Condition>((msisdn != null) OR (msisdn != ""))</Condition>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/apn-change") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="spnUpdate">
+            <Description>Actualiza el spn del dispositivo de un usuario</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-Request-SPN</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(imsi is null) OR (imsi = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetSPN</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{idSubscriber}/spn") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="getKpis">
+            <Description>Obtiene el trafico de subida y bajada de las ultimas 24 hrs</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-requestSpeed</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> ((imsi is null) OR (imsi = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetKpis360</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/imsi/{imsi}/kpisTs") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="identifyUser">
+            <Description>Obtiene los datos de un usuario</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null) OR (user is null) OR (user = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/identify-user") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="defaultPassword">
+            <Description>Obtiene o fija el password por default que se utiliza para los usuarios recién creados en View360</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null) OR (action is null) OR (action = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/mvno/{beid}/default-password") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="searchRole">
+            <Description>Búsqueda de rol por tipo</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <!--<Step>
+                    <Name>AM-SetTargetSelfManagementUsers</Name>
+                </Step> -->
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/roles/search") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="licencesMVNO">
+            <Description>Búsqueda de rol por tipo</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <!--<Step>
+                    <Name>AM-SetTargetSelfManagementUsers</Name>
+                </Step> -->
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/mvno/{PartnerId}/licences") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="resetPassword">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/reset-password") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="deleteUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/unsubscribe") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="changeRole">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/change-role") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="addUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(request.header.Operation-User is null) OR (request.header.Operation-Password is null) OR (request.header.PartnerId is null) OR (request.header.OperatorId is null)</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetUsers</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/subscribe") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="improvementPlans">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>EV-PathVariablesRequest</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition>(page is null) OR (limit is null) OR (identifierType is null) OR (page = "") OR (limit = "") OR (identifierType = "")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateIdentifierType</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateIdentifier</Name>
+                    <Condition>isIdentifierValid = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidateDateImprovementPlans</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyReportRecord</Name>
+                    <Condition>(verifyDate = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-ValidatePageAndLimit</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ValidatePage</Name>
+                    <Condition>(offsetValue = "false")</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetImprovementPlans</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/network-services/improvement-plans") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="resetVoiceMailPassword">
+            <Description>El API permite la autogestion en el reset de password del servicio de buzon de voz-voice mail</Description>
+            <Request>
+                <Step>
+                    <Name>REP-MessageBalances</Name>
+                </Step>
+                <Step>
+                    <Name>AE-GetAppInfo</Name>
+                </Step>
+                <Step>
+                    <Name>EV-RequestResetVMSPassword</Name>
+                </Step>
+                <Step>
+                    <Name>RF-VerifyParamsError</Name>
+                    <Condition> (( msisdn is null) OR (msisdn = ""))</Condition>
+                </Step>
+                <Step>
+                    <Name>FC-ParamsValidator</Name>
+                </Step>
+                <Step>
+                    <Name>RF-ParamValidator</Name>
+                    <Condition>validator.error = "false"</Condition>
+                </Step>
+                <Step>
+                    <Name>AM-SetTargetResetVMSPassword</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/{msisdn}/resetPasswordVMS") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="FlujoInexistente">
+            <Description>Cuando hay un error al consumir un recurso</Description>
+            <Request>
+                <Step>
+                    <Name>RF-Verb</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+    </Flows>
+    <HTTPProxyConnection>
+        <BasePath>/cm-360/v1</BasePath>
+        <Properties/>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="NoRoute">
+        <Condition>(targetEndpoint.name == "NoRoute")</Condition>
+    </RouteRule>
+    <RouteRule name="IdentifySubscriber">
+        <TargetEndpoint>IdentifySubscriber</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "IdentifySubscriber")</Condition>
+    </RouteRule>
+    <RouteRule name="HSS">
+        <TargetEndpoint>HSS</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "HSS")</Condition>
+    </RouteRule>
+    <RouteRule name="HistoryInfo">
+        <TargetEndpoint>History-Info</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "HistoryInfo")</Condition>
+    </RouteRule>
+    <RouteRule name="Offerings">
+        <TargetEndpoint>Offerings</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "Offerings")</Condition>
+    </RouteRule>
+    <RouteRule name="SubscriberInfo">
+        <TargetEndpoint>SubscriberInfo</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "SubscriberInfo")</Condition>
+    </RouteRule>
+    <RouteRule name="Kpis360">
+        <TargetEndpoint>KPIs-360</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "Kpis360")</Condition>
+    </RouteRule>
+    <RouteRule name="APN">
+        <TargetEndpoint>APN</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "APN")</Condition>
+    </RouteRule>
+    <RouteRule name="ConsumptionsIoT">
+        <TargetEndpoint>ConsumptionsIoT</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "ConsumptionsIoT")</Condition>
+    </RouteRule>
+    <RouteRule name="Users">
+        <TargetEndpoint>Users</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "Users")</Condition>
+    </RouteRule>
+    <RouteRule name="Improvement-Plans">
+        <TargetEndpoint>Improvement-Plans</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "Improvement-Plans")</Condition>
+    </RouteRule>
+    <RouteRule name="GetDeviceInformation">
+        <TargetEndpoint>GetDeviceInformation</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "GetDeviceInformation")</Condition>
+    </RouteRule>
+    <RouteRule name="GetRecordActionsByMobility">
+        <TargetEndpoint>GetRecordActionsByMobility</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "GetRecordActionsByMobility")</Condition>
+    </RouteRule>
+    <RouteRule name="GetKpisTs">
+        <TargetEndpoint>GetKpisTs</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "GetKpisTs")</Condition>
+    </RouteRule>
+    <RouteRule name="SPN">
+        <TargetEndpoint>SPN</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "SPN")</Condition>
+    </RouteRule>
+    <RouteRule name="VOICE-MAIL">
+        <TargetEndpoint>VOICE-MAIL</TargetEndpoint>
+        <Condition>(targetEndpoint.name == "VOICE-MAIL")</Condition>
+    </RouteRule>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>
