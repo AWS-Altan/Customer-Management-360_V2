@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="10" name="UF-QueryServiceability">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1523900191137</CreatedAt>
+    <CreatedBy>carlos.eduardo.jaguey.cortes@everis.com</CreatedBy>
+    <Description>Adicion de politicas para el funcionamiento de HBB Satelital, revision creada a partir de Rev9(prod)</Description>
+    <DisplayName>UF-QueryServiciability</DisplayName>
+    <LastModifiedAt>1629919383674</LastModifiedAt>
+    <LastModifiedBy>antonio.hernandez@altanredes.com</LastModifiedBy>
+    <ManifestVersion>SHA-512:fdd73815485221ed0fb0ff4608121208968e775b751a94036a7de674469af3276f3623ed7ff18d0bf000640c3a1bd6259efa2f68b9310a30a36198ea25db11c1:us-east-1</ManifestVersion>
+    <Policies>
+        <Policy>AM-RequestCoverage</Policy>
+        <Policy>AM-RequestCoverageIsInternalCall</Policy>
+        <Policy>AM-SetAuditorDataCoverageService</Policy>
+        <Policy>AM-SetAuditorDataCoverageServiceOut</Policy>
+        <Policy>EV-ResponseCoverage</Policy>
+        <Policy>EV-ResponseCoverageWithInternalCall</Policy>
+        <Policy>FC-AuditorService</Policy>
+        <Policy>FC-GenerateSubTransactionId</Policy>
+        <Policy>JS-AreBlocked</Policy>
+        <Policy>JS-SetAuditorDataCoverage</Policy>
+        <Policy>JS-SetErrorDescriptionIfIsSatellitalCoordinates</Policy>
+        <Policy>JS-ValidateCoverage</Policy>
+        <Policy>RF-BlockedCoordinates</Policy>
+        <Policy>RF-Serviceability</Policy>
+        <Policy>RF-ValidateCoverage</Policy>
+        <Policy>RF-ValidateCoverageLengthError</Policy>
+        <Policy>RF-ValidateCoverageV3Serv</Policy>
+        <Policy>Raise-Fault-1</Policy>
+        <Policy>SC-CoverageService</Policy>
+        <Policy>SC-CoverageServiceWithInternalCall</Policy>
+    </Policies>
+    <Resources>
+        <Resource>jsc://areBlocked.js</Resource>
+        <Resource>jsc://setAuditorDataCoverage.js</Resource>
+        <Resource>jsc://setErrorDescriptionIfIsSatellitalCoordinates.js</Resource>
+        <Resource>jsc://validateCoverage.js</Resource>
+    </Resources>
+    <Spec></Spec>
+    <subType>SharedFlow</subType>
+    <SharedFlows>
+        <SharedFlow>default</SharedFlow>
+    </SharedFlows>
+</SharedFlowBundle>
