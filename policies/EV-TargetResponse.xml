@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-TargetResponse">
+    <DisplayName>EV-TargetResponse</DisplayName>
+    <JSONPayload>
+        <Variable name="errorTargetStatus" type="string">
+            <JSONPath>$.status</JSONPath>
+        </Variable>
+        <Variable name="errorTargetMessage" type="string">
+            <JSONPath>$.message</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>response</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

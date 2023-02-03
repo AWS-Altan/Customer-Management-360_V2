@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-UpdateAPN400">
+    <DisplayName>EV-UpdateAPN400</DisplayName>
+    <JSONPayload>
+        <Variable name="errorTargetStatus" type="string">
+            <JSONPath>$.errorCode</JSONPath>
+        </Variable>
+        <Variable name="errorTargetMessage" type="string">
+            <JSONPath>$.description</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>response</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

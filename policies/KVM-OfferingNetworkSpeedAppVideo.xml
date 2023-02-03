@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-OfferingNetworkSpeedAppVideo" mapIdentifier="OfferingNetworkSpeedAppVideo">
+    <DisplayName>KVM-OfferingNetworkSpeedAppVideo</DisplayName>
+    <Scope>environment</Scope>
+    <Get assignTo="OfferingNetworkSpeedAppVideo" index="1">
+        <Key>
+            <Parameter>offerData</Parameter>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

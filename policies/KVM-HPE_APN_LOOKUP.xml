@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-HPE_APN_LOOKUP" mapIdentifier="HPE_APN_LOOKUP">
+    <DisplayName>KVM-HPE_APN_LOOKUP</DisplayName>
+    <Properties/>
+    <Get assignTo="pdp_ctx_cos_name_1_kvm">
+        <Key>
+            <Parameter ref="pdp_ctx_cos_name_1_source"/>
+        </Key>
+    </Get>
+    <Get assignTo="pdp_ctx_cos_name_2_kvm">
+        <Key>
+            <Parameter ref="pdp_ctx_cos_name_2_source"/>
+        </Key>
+    </Get>
+    <Get assignTo="apn_config_entry_name_1_kvm">
+        <Key>
+            <Parameter ref="apn_config_entry_name_1_source"/>
+        </Key>
+    </Get>
+    <Get assignTo="apn_config_entry_name_2_kvm">
+        <Key>
+            <Parameter ref="apn_config_entry_name_2_source"/>
+        </Key>
+    </Get>
+    <Get assignTo="apn_config_entry_name_3_kvm">
+        <Key>
+            <Parameter ref="apn_config_entry_name_3_source"/>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

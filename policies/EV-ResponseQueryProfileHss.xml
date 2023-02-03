@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-ResponseQueryProfileHss">
+    <DisplayName>EV-ResponseQueryProfileHss</DisplayName>
+    <JSONPayload>
+        <Variable name="result">
+            <JSONPath>$.Envelope.Body.searchResponse.result</JSONPath>
+        </Variable>
+        <Variable name="errorCode">
+            <JSONPath>$.Envelope.Body.searchResponse.errorCode</JSONPath>
+        </Variable>
+        <Variable name="errorMessage">
+            <JSONPath>$.Envelope.Body.searchResponse.errorMessage</JSONPath>
+        </Variable>
+        <Variable name="imsi">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.auc.imsi</JSONPath>
+        </Variable>
+        <Variable name="hlr">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr</JSONPath>
+        </Variable>
+        <Variable name="umtsSubscriber">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.umtsSubscriber</JSONPath>
+        </Variable>
+        <Variable name="pdpContext">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.pdpContext</JSONPath>
+        </Variable>
+        <Variable name="vlrMobData">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.vlrMobData</JSONPath>
+        </Variable>
+        <Variable name="sgsnMobData">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.sgsnMobData</JSONPath>
+        </Variable>
+        <Variable name="roamSubscriptionInfo">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.roamSubscription.roamSubscriptionInfo</JSONPath>
+        </Variable>
+        <Variable name="eps">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.eps</JSONPath>
+        </Variable>
+        <Variable name="hss">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hss</JSONPath>
+        </Variable>
+        <Variable name="epsPdnContext">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.hlr.epsPdnContext</JSONPath>
+        </Variable>
+        <Variable name="mnp">
+            <JSONPath>$.Envelope.Body.searchResponse.objects.mnp</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source clearPayload="false">response</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <VariablePrefix>rspHSS</VariablePrefix>
+</ExtractVariables>

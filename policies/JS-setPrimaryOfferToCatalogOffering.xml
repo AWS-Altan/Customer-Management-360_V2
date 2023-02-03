@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Javascript async="false" continueOnError="false" enabled="true" timeLimit="2500" name="JS-setPrimaryOfferToCatalogOffering">
+    <DisplayName>JS-setPrimaryOfferToCatalogOffering</DisplayName>
+    <Properties/>
+    <ResourceURL>jsc://setValidOffersToCatalogOffferings.js</ResourceURL>
+</Javascript>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout async="false" continueOnError="false" enabled="true" name="FC-CreateResponseProfile360V2">
+    <DisplayName>FC-CreateResponseProfile360V2</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <SharedFlowBundle>UF-CreateResponseProfile360V2</SharedFlowBundle>
+</FlowCallout>

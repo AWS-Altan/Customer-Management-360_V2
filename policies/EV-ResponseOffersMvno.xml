@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-ResponseOffersMvno">
+    <DisplayName>EV-ResponseOffersMvno</DisplayName>
+    <JSONPayload>
+        <Variable name="beId">
+            <JSONPath>$.beId</JSONPath>
+        </Variable>
+        <Variable name="count">
+            <JSONPath>$.offersCount</JSONPath>
+        </Variable>
+        <Variable name="dataOfferings">
+            <JSONPath>$.offersMvno</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source clearPayload="false">response.content</Source>
+    <VariablePrefix>responseMvno</VariablePrefix>
+</ExtractVariables>

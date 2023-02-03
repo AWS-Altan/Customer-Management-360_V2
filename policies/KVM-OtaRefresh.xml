@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-OtaRefresh" mapIdentifier="OTArefresh">
+    <DisplayName>KVM-OtaRefresh</DisplayName>
+    <Properties/>
+    <ExclusiveCache>false</ExclusiveCache>
+    <ExpiryTimeInSecs>10</ExpiryTimeInSecs>
+    <Get assignTo="OTACommand">
+        <Key>
+            <Parameter ref="PartnerId"/>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

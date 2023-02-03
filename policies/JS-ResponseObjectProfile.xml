@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Javascript async="false" continueOnError="false" enabled="true" timeLimit="200" name="JS-ResponseObjectProfile">
+    <DisplayName>JS-ResponseObjectProfile</DisplayName>
+    <Properties/>
+    <ResourceURL>jsc://ResponseObjectProfile.js</ResourceURL>
+</Javascript>

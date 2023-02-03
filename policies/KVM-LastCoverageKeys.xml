@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-LastCoverageKeys" mapIdentifier="IndicadoresUltimaCobertura">
+    <DisplayName>KVM-LastCoverageKeys</DisplayName>
+    <Properties/>
+    <Get assignTo="indicatorsOfCoverage">
+        <Key>
+            <Parameter>indicators</Parameter>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

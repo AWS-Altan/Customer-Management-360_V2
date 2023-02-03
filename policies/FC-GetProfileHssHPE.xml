@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout async="false" continueOnError="false" enabled="true" name="FC-GetProfileHssHPE">
+    <DisplayName>FC-GetProfileHssHPE</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <SharedFlowBundle>BF-GetProfileHssHPE</SharedFlowBundle>
+</FlowCallout>
