@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables name="EV-PathVariablesRequest" enabled="true" continueOnError="false" async="false">
+    <DisplayName>EV-PathVariablesRequest</DisplayName>
+    <URIPath>
+        <Pattern>**/subscribers/{msisdn}/**</Pattern>
+    </URIPath>
+    <URIPath>
+        <Pattern>**/imei/{imei}/**</Pattern>
+    </URIPath>
+    <URIPath>
+        <Pattern>**/imsi/{imsi}/**</Pattern>
+    </URIPath>
+    <URIPath>
+        <Pattern>**/mvno/{PartnerId}/**</Pattern>
+    </URIPath>
+    <URIPath>
+        <Pattern>**/mvnos/{mvno}/**</Pattern>
+    </URIPath>
+    <QueryParam name="startDate">
+        <Pattern ignoreCase="true">{startDate}</Pattern>
+    </QueryParam>
+    <QueryParam name="page">
+        <Pattern ignoreCase="true">{page}</Pattern>
+    </QueryParam>
+    <QueryParam name="limit">
+        <Pattern ignoreCase="true">{limit}</Pattern>
+    </QueryParam>
+    <QueryParam name="endDate">
+        <Pattern ignoreCase="true">{endDate}</Pattern>
+    </QueryParam>
+    <QueryParam name="reportMode">
+        <Pattern ignoreCase="true">{reportMode}</Pattern>
+    </QueryParam>
+    <QueryParam name="imei">
+        <Pattern ignoreCase="true">{imei}</Pattern>
+    </QueryParam>
+    <QueryParam name="identifierType">
+        <Pattern ignoreCase="false">{identifierType}</Pattern>
+    </QueryParam>
+    <QueryParam name="identifierValue">
+        <Pattern ignoreCase="false">{identifierValue}</Pattern>
+    </QueryParam>
+    <QueryParam name="version">
+        <Pattern ignoreCase="false">{version}</Pattern>
+    </QueryParam>
+    <Header name="Operation-User">
+        <Pattern ignoreCase="false">{Operation-User}</Pattern>
+    </Header>
+    <Header name="Operation-Password">
+        <Pattern ignoreCase="false">{Operation-Password}</Pattern>
+    </Header>
+    <Header name="PartnerId">
+        <Pattern ignoreCase="false">{PartnerId}</Pattern>
+    </Header>
+    <Header name="OperatorId">
+        <Pattern ignoreCase="false">{OperatorId}</Pattern>
+    </Header>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>

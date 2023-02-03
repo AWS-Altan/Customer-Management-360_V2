@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-ValidateApnByClient">
+    <DisplayName>AM-ValidateApnByClient</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="Operation-User">{Operation-User}</Header>
+            <Header name="Operation-Password">{Operation-Password}</Header>
+            <Header name="OperatorId">{OperatorId}</Header>
+            <Header name="PartnerId">{PartnerId}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Value>subscriber/validateApnByClient</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

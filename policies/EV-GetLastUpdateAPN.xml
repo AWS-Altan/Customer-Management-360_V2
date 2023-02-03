@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-GetLastUpdateAPN">
+    <DisplayName>EV-GetLastUpdateAPN</DisplayName>
+    <Properties/>
+    <JSONPayload>
+        <Variable name="statusAditorData">
+            <JSONPath>$.ServiceCallout.request</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

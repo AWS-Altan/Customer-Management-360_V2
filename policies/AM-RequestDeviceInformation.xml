@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-RequestDeviceInformation">
+    <DisplayName>AM-RequestDeviceInformation</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+            <Header name="Operation-User">{Operation-User}</Header>
+            <Header name="Operation-Password">{Operation-Password}</Header>
+            <Header name="OperatorId">{OperatorId}</Header>
+            <Header name="PartnerId">{PartnerId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="identifierType">{identifierType}</QueryParam>
+            <QueryParam name="beId">{PartnerId}</QueryParam>
+            <QueryParam name="identifierValue">{identifierValue}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>subscribers/getDeviceInformation</Template>
+        <!--<Template>recordConsumptions</Template>-->
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

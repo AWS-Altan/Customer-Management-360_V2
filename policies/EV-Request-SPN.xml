@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables name="EV-Request-SPN" enabled="true" continueOnError="false" async="false">
+    <DisplayName>EV-Request-SPN</DisplayName>
+    <Header name="Operation-User">
+        <Pattern ignoreCase="false">{Operation-User}</Pattern>
+    </Header>
+    <Header name="Operation-Password">
+        <Pattern ignoreCase="false">{Operation-Password}</Pattern>
+    </Header>
+    <Header name="PartnerId">
+        <Pattern ignoreCase="false">{PartnerId}</Pattern>
+    </Header>
+    <Header name="OperatorId">
+        <Pattern ignoreCase="false">{OperatorId}</Pattern>
+    </Header>
+    <URIPath>
+        <Pattern>**/subscribers/{idSubscriber}/**</Pattern>
+    </URIPath>
+    <QueryParam name="identifierType">
+        <Pattern ignoreCase="false">{identifierType}</Pattern>
+    </QueryParam>
+    <QueryParam name="identifierValue">
+        <Pattern ignoreCase="false">{identifierValue}</Pattern>
+    </QueryParam>
+    <QueryParam name="msisdn">
+        <Pattern ignoreCase="false">{msisdn}</Pattern>
+    </QueryParam>
+    <JSONPayload>
+        <Variable name="be">
+            <JSONPath>$.be</JSONPath>
+        </Variable>
+        <Variable name="imsi">
+            <JSONPath>$.imsi</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>request</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

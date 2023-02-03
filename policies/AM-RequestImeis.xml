@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-RequestImeis">
+    <DisplayName>AM-RequestImeis</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="beId">{PartnerId}</QueryParam>
+            <QueryParam name="page">{page}</QueryParam>
+            <QueryParam name="limit">{limit}</QueryParam>
+            <QueryParam name="startDate">{startDate}</QueryParam>
+            <QueryParam name="endDate">{endDate}</QueryParam>
+            <QueryParam name="msisdn">{msisdn}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>subscribers/{msisdn}/imei</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

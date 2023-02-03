@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-RequestMvnoOffers">
+    <DisplayName>EV-RequestMvnoOffers</DisplayName>
+    <QueryParam name="offeringId">
+        <Pattern ignoreCase="true">{offeringId}</Pattern>
+    </QueryParam>
+    <QueryParam name="moduleType">
+        <Pattern ignoreCase="true">{moduleType}</Pattern>
+    </QueryParam>
+    <QueryParam name="moduleValue">
+        <Pattern ignoreCase="true">{moduleValue}</Pattern>
+    </QueryParam>
+    <URIPath>
+        <Pattern>**/mvno/{PartnerId}/**</Pattern>
+    </URIPath>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>

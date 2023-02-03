@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetAuditorDataImeisOUT">
+    <DisplayName>AM-SetAuditorDataImeisOUT</DisplayName>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Obtener historial de Imeis</Value>
+        <Ref/>
+    </AssignVariable>
+</AssignMessage>

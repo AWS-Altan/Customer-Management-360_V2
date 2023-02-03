@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-RequestIdentifyUser">
+    <DisplayName>EV-RequestIdentifyUser</DisplayName>
+    <URIPath>
+        <Pattern>**/mvno/{beid}/**</Pattern>
+    </URIPath>
+    <Header name="Operation-User">
+        <Pattern ignoreCase="false">{Operation-User}</Pattern>
+    </Header>
+    <Header name="Operation-Password">
+        <Pattern ignoreCase="false">{Operation-Password}</Pattern>
+    </Header>
+    <Header name="PartnerId">
+        <Pattern ignoreCase="false">{PartnerId}</Pattern>
+    </Header>
+    <Header name="OperatorId">
+        <Pattern ignoreCase="false">{OperatorId}</Pattern>
+    </Header>
+    <QueryParam name="user">
+        <Pattern ignoreCase="false">{user}</Pattern>
+    </QueryParam>
+    <QueryParam name="roleType">
+        <Pattern ignoreCase="false">{roleType}</Pattern>
+    </QueryParam>
+    <JSONPayload>
+        <Variable name="user">
+            <JSONPath>$.user</JSONPath>
+        </Variable>
+        <Variable name="action">
+            <JSONPath>$.action</JSONPath>
+        </Variable>
+        <Variable name="password">
+            <JSONPath>$.password</JSONPath>
+        </Variable>
+        <Variable name="newPass">
+            <JSONPath>$.newPass</JSONPath>
+        </Variable>
+        <Variable name="idResetBy">
+            <JSONPath>$.idResetBy</JSONPath>
+        </Variable>
+        <Variable name="resetBy">
+            <JSONPath>$.resetBy</JSONPath>
+        </Variable>
+        <Variable name="deletedBy">
+            <JSONPath>$.deletedBy</JSONPath>
+        </Variable>
+        <Variable name="idDeletedBy">
+            <JSONPath>$.idDeletedBy</JSONPath>
+        </Variable>
+        <Variable name="prodTs">
+            <JSONPath>$.prodTs</JSONPath>
+        </Variable>
+        <Variable name="TS_RoleId">
+            <JSONPath>$.TS_RoleId</JSONPath>
+        </Variable>
+        <Variable name="ProdAprov">
+            <JSONPath>$.ProdAprov</JSONPath>
+        </Variable>
+        <Variable name="Prov_RoleId">
+            <JSONPath>$.Prov_RoleId</JSONPath>
+        </Variable>
+        <Variable name="IdModifiedBy">
+            <JSONPath>$.IdModifiedBy</JSONPath>
+        </Variable>
+        <Variable name="ModifiedBy">
+            <JSONPath>$.ModifiedBy</JSONPath>
+        </Variable>
+        <Variable name="IdCreatedBy">
+            <JSONPath>$.IdCreatedBy</JSONPath>
+        </Variable>
+        <Variable name="CreatedBy">
+            <JSONPath>$.CreatedBy</JSONPath>
+        </Variable>
+        <Variable name="Cobertura_ID">
+            <JSONPath>$.Cobertura_ID</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>request</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

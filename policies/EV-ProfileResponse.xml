@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-ProfileResponse">
+    <DisplayName>EV-ProfileResponse</DisplayName>
+    <JSONPayload>
+        <Variable name="statusError">
+            <JSONPath>$.errorCode</JSONPath>
+        </Variable>
+        <Variable name="descriptionError">
+            <JSONPath>$.description</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>response</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

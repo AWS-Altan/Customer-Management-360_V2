@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetAuditorDataOutIoTConsumptions">
+    <DisplayName>AM-SetAuditorDataOutIoTConsumptions</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>12d0s7vf6b.execute-api.us-east-1.amazonaws.com/Prod/umbrales</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.data</Name>
+        <Ref>response.content</Ref>
+    </AssignVariable>
+</AssignMessage>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetAuditorDataMnpNokiaOUT">
+    <DisplayName>AM-SetAuditorDataMnpNokiaOUT</DisplayName>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Get Mnp</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.data</Name>
+        <Ref>responseMnpNokia.content</Ref>
+    </AssignVariable>
+</AssignMessage>

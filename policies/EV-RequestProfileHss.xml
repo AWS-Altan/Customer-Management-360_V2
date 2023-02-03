@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-RequestProfileHss">
+    <DisplayName>EV-RequestProfileHss</DisplayName>
+    <Properties/>
+    <QueryParam name="product">
+        <Pattern ignoreCase="true">{producto}</Pattern>
+    </QueryParam>
+    <Header name="semaforo">
+        <Pattern ignoreCase="false">{semaforo}</Pattern>
+    </Header>
+    <URIPath>
+        <Pattern>**/subscribers/{msisdn}/**</Pattern>
+    </URIPath>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>

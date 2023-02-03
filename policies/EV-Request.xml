@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables name="EV-Request" enabled="true" continueOnError="false" async="false">
+    <DisplayName>EV-Request</DisplayName>
+    <Header name="Operation-User">
+        <Pattern ignoreCase="false">{Operation-User}</Pattern>
+    </Header>
+    <Header name="Operation-Password">
+        <Pattern ignoreCase="false">{Operation-Password}</Pattern>
+    </Header>
+    <Header name="PartnerId">
+        <Pattern ignoreCase="false">{PartnerId}</Pattern>
+    </Header>
+    <Header name="OperatorId">
+        <Pattern ignoreCase="false">{OperatorId}</Pattern>
+    </Header>
+    <Header name="getDateFirstActivation">
+        <Pattern ignoreCase="false">{getDateFirstActivation}</Pattern>
+    </Header>
+    <URIPath>
+        <Pattern>**/subscribers/{idSubscriber}/**</Pattern>
+    </URIPath>
+    <QueryParam name="identifierType">
+        <Pattern ignoreCase="false">{identifierType}</Pattern>
+    </QueryParam>
+    <QueryParam name="identifierValue">
+        <Pattern ignoreCase="false">{identifierValue}</Pattern>
+    </QueryParam>
+    <QueryParam name="imei">
+        <Pattern ignoreCase="false">{imei}</Pattern>
+    </QueryParam>
+    <QueryParam name="producto">
+        <Pattern ignoreCase="true">{producto}</Pattern>
+    </QueryParam>
+    <JSONPayload>
+        <Variable name="identifierType">
+            <JSONPath>$.identifierType</JSONPath>
+        </Variable>
+        <Variable name="identifierValue">
+            <JSONPath>$.identifierValue</JSONPath>
+        </Variable>
+        <Variable name="msisdn">
+            <JSONPath>$.msisdn</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <Source>request</Source>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

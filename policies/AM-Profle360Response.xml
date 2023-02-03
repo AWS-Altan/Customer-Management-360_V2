@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-Profle360Response">
+    <DisplayName>AM-Profle360Response</DisplayName>
+    <Set>
+        <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+            @finalResponse#
+        </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="https" type="response"/>
+</AssignMessage>

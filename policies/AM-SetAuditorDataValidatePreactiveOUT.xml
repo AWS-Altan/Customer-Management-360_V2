@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetAuditorDataValidatePreactiveOUT">
+    <DisplayName>AM-SetAuditorDataValidatePreactiveOUT</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Validar Suscriptor Preactivo</Value>
+        <Ref/>
+    </AssignVariable>
+</AssignMessage>

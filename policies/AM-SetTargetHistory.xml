@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetTargetHistory">
+    <DisplayName>AM-SetTargetHistory</DisplayName>
+    <AssignVariable>
+        <Name>targetEndpoint.name</Name>
+        <Value>HistoryInfo</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

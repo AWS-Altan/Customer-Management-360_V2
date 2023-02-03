@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-PathBand28Request">
+    <DisplayName>EV-PathBand28Request</DisplayName>
+    <URIPath>
+        <Pattern>**/imei/{imei}/**</Pattern>
+    </URIPath>
+    <Header name="Operation-User">
+        <Pattern ignoreCase="false">{Operation-User}</Pattern>
+    </Header>
+    <Header name="Operation-Password">
+        <Pattern ignoreCase="false">{Operation-Password}</Pattern>
+    </Header>
+    <Header name="PartnerId">
+        <Pattern ignoreCase="false">{PartnerId}</Pattern>
+    </Header>
+    <Header name="OperatorId">
+        <Pattern ignoreCase="false">{OperatorId}</Pattern>
+    </Header>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>

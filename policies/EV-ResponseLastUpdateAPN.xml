@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-ResponseLastUpdateAPN">
+    <DisplayName>EV-ResponseLastUpdateAPN</DisplayName>
+    <Properties/>
+    <JSONPayload>
+        <Variable name="statusCode">
+            <JSONPath>$.responseGetLastUpdatedAPN.statusCode</JSONPath>
+        </Variable>
+        <Variable name="update_status">
+            <JSONPath>$.responseGetLastUpdatedAPN.update_status</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>
