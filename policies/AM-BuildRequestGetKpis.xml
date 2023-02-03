@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestGetKpis">
+    <DisplayName>AM-BuildRequestGetKpis</DisplayName>
+    <Set>
+        <Payload contentType="application/json">
+           {
+                "imsi": "{imsi}"
+           }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>prod/kpists</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

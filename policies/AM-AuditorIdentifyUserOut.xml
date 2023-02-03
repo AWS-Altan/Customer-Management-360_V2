@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-AuditorIdentifyUserOut">
+    <DisplayName>AM-AuditorIdentifyUserOut</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Identify User 360</Value>
+        <Ref/>
+    </AssignVariable>
+</AssignMessage>

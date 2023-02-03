@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestConsultLastApn">
+    <DisplayName>AM-BuildRequestConsultLastApn</DisplayName>
+    <Properties/>
+    <Set>
+        <QueryParams>
+            <QueryParam name="msisdn">{msisdn}</QueryParam>
+            <QueryParam name="be_id">{PartnerId}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request">requestGetLastUpdatedAPN</AssignTo>
+</AssignMessage>

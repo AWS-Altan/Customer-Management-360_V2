@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestImprovementPlans">
+    <DisplayName>AM-BuildRequestImprovementPlans</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="identifierType">{identifierType}</QueryParam>
+            <QueryParam name="beId">{PartnerId}</QueryParam>
+            <QueryParam name="identifierValue">{identifierValue}</QueryParam>
+            <QueryParam name="page">{page}</QueryParam>
+            <QueryParam name="limit">{limit}</QueryParam>
+            <QueryParam name="startDate">{startDate}</QueryParam>
+            <QueryParam name="endDate">{endDate}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>/network-services/improvement-plans</Template>
+        <!--<Template>recordStatus</Template> -->
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

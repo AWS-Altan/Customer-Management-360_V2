@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestMvnoOffers">
+    <DisplayName>AM-BuildRequestMvnoOffers</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <Payload contentType="application/json">
+            {
+				"be_id": "{PartnerId}",
+				"modulo": "{moduleValue}"
+            }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Value>offerings</Value>
+        <Ref/>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

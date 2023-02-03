@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestProfile360">
+    <DisplayName>AM-BuildRequestProfile360</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="Operation-User">{Operation-User}</Header>
+            <Header name="Operation-Password">{Operation-Password}</Header>
+            <Header name="OperatorId">{OperatorId}</Header>
+            <Header name="PartnerId">{PartnerId}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <!-- Prod <Template>subscribers/{msisdn}/profile</Template> -->
+        <Template>subscribers/{msisdn}/profile</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

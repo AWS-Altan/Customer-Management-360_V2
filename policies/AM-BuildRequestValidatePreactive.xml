@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestValidatePreactive">
+    <DisplayName>AM-BuildRequestValidatePreactive</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+            <Header name="beId">{PartnerId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="msisdn">{msisdn}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <Remove>
+        <Payload>true</Payload>
+    </Remove>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Value>subscriber/validate</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

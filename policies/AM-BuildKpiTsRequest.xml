@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildKpiTsRequest">
+    <DisplayName>AM-BuildKpiTsRequest</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+            <Header name="Operation-User">{Operation-User}</Header>
+            <Header name="Operation-Password">{Operation-Password}</Header>
+            <Header name="OperatorId">{OperatorId}</Header>
+            <Header name="PartnerId">{PartnerId}</Header>
+        </Headers>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>imsi/{imsi}/getKpis</Template>
+        <!--<Template>recordConsumptions</Template>-->
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

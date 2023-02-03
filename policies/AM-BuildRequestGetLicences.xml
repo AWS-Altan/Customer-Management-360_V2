@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestGetLicences">
+    <DisplayName>AM-BuildRequestGetLicences</DisplayName>
+    <Properties/>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <!-- Prod <Value>identufysus/identifySubscriber</Value> -->
+        <!-- <Value>pruebas/identifySubscriber</Value>-->
+        <!-- <Value>/prod/identifySubscriber</Value> -->
+        <Template>/companies/{PartnerId}/licences</Template>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="https" type="request"/>
+</AssignMessage>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-GetSubscriberByImsiResponse" enabled="true" continueOnError="false" async="false">
+    <DisplayName>AM-GetSubscriberByImsiResponse</DisplayName>
+    <Set>
+        <Payload variableSuffix="#" variablePrefix="@" contentType="application/json">
+            {
+                "msisdn": "@identifierResponse.msisdn#",
+                "imsi": "@identifierResponse.imsi#",
+                "imei": "@identifierResponse.imei#",
+                "iccid": "@identifierResponse.iccid#",
+                "beId": "@identifierResponse.beId#"
+            }
+        </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo type="response" transport="https" createNew="true"/>
+</AssignMessage>

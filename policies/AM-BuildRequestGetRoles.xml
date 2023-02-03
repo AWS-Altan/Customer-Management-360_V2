@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestGetRoles">
+    <DisplayName>AM-BuildRequestGetRoles</DisplayName>
+    <Properties/>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="roleType">{roleType}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <!-- Prod <Value>identufysus/identifySubscriber</Value> -->
+        <!-- <Value>pruebas/identifySubscriber</Value>-->
+        <!-- <Value>/prod/identifySubscriber</Value> -->
+        <Template>/roles/search</Template>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="https" type="request"/>
+</AssignMessage>

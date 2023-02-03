@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestSpnUpdate">
+    <DisplayName>AM-BuildRequestSpnUpdate</DisplayName>
+    <Set>
+        <Payload contentType="application/json">
+            {
+                "be": "{be}",
+                "imsi":"{imsi}",
+                "msisdn":"{idSubscriber}"
+            }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.apn.operationpath</Name>
+        <Template>/prod/spn-update</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

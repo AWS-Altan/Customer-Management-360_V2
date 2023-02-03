@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-AuditorRoleSearchIn">
+    <DisplayName>AM-AuditorRoleSearchIn</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>in</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Role Search 360</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.data</Name>
+        <Ref>request.content</Ref>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

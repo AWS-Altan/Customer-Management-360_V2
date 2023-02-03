@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestUpdateApn">
+    <DisplayName>AM-BuildRequestUpdateApn</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+        </Headers>
+        <Payload contentType="application/json">
+            {
+				"scenarioId": {scenarioId},
+				"auditParams": {
+                  	"partnerId":"{PartnerId}",
+                  	"auditorApp":"{Auditor.app}",
+                  	"auditorEnv":"{Auditor.env}",
+                  	"auditorId":"{Auditor.id}",
+                  	"auditorIdType":"{Auditor.idType}",
+                  	"auditorOperation":"{Auditor.operation}",
+                  	"subTransactionId": "{Auditor.subTransactionId}"
+                }
+            }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>subscribers/{msisdn}/updateapn</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

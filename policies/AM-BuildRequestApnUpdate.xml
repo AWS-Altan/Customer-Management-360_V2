@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestApnUpdate">
+    <DisplayName>AM-BuildRequestApnUpdate</DisplayName>
+    <Set>
+        <Payload contentType="application/json">
+            {
+				"be_id": "{PartnerId}",
+				"msisdn": "{msisdn}"
+            }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.apn.operationpath</Name>
+        <Template>prod/envio-apn-view360</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

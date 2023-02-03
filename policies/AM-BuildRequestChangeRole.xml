@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-BuildRequestChangeRole">
+    <DisplayName>AM-BuildRequestChangeRole</DisplayName>
+    <Set>
+        <Headers>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <Payload contentType="application/json">
+            {
+                "user": "{user}",
+                "prodTs": "{prodTs}",
+                "TS_RoleId": "{TS_RoleId}",
+	            "ProdAprov": "{ProdAprov}",
+	            "Prov_RoleId": "{Prov_RoleId}",
+	            "IdModifiedBy": "{IdModifiedBy}",
+	            "ModifiedBy": "{ModifiedBy}",
+	            "Cobertura_ID": "{Cobertura_ID}"
+            }
+        </Payload>
+        <Verb>POST</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <Template>companies/{PartnerId}/users/change-role</Template>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>POST</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

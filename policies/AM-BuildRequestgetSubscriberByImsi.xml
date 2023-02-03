@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-BuildRequestgetSubscriberByImsi" enabled="true" continueOnError="false" async="false">
+    <DisplayName>AM-BuildRequestgetSubscriberByImsi</DisplayName>
+    <Properties/>
+    <Set>
+        <Headers>
+            <Header name="X-APIGW-TOKEN">{apigee.access_token}</Header>
+            <Header name="TransactionId">{transactionId}</Header>
+        </Headers>
+        <QueryParams>
+            <QueryParam name="beId">{PartnerId}</QueryParam>
+        </QueryParams>
+        <Verb>GET</Verb>
+    </Set>
+    <AssignVariable>
+        <Name>flow.mds.operationpath</Name>
+        <!-- Prod <Value>identifySubscriber</Value> -->
+        <Value>getSubscriberByImsi</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>OriginVerb</Name>
+        <Value>GET</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo type="request" transport="http" createNew="false"/>
+</AssignMessage>

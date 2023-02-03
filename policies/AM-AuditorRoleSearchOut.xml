@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-AuditorRoleSearchOut">
+    <DisplayName>AM-AuditorRoleSearchOut</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>out</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Default Password 360</Value>
+        <Ref/>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-AuditorRefresNetworkIn">
+    <DisplayName>AM-AuditorRefresNetworkIn</DisplayName>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>in</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Update Network</Value>
+        <Ref/>
+    </AssignVariable>
+</AssignMessage>

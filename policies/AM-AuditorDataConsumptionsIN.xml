@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-AuditorDataConsumptionsIN">
+    <DisplayName>AM-AuditorDataConsumptionsIN</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>Auditor.inout</Name>
+        <Value>in</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.target</Name>
+        <Value>Obtener historial de Consumos</Value>
+        <Ref/>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>Auditor.data</Name>
+        <Value>{}</Value>
+    </AssignVariable>
+</AssignMessage>
