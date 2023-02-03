@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<SharedFlowBundle revision="10" name="UF-QueryServiceability">
+<SharedFlowBundle revision="11" name="UF-QueryServiceability">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1523900191137</CreatedAt>
     <CreatedBy>carlos.eduardo.jaguey.cortes@everis.com</CreatedBy>
-    <Description>Adicion de politicas para el funcionamiento de HBB Satelital, revision creada a partir de Rev9(prod)</Description>
+    <Description>Nuevo Policy Counter para IoT de rev prod 10</Description>
     <DisplayName>UF-QueryServiciability</DisplayName>
-    <LastModifiedAt>1629919383674</LastModifiedAt>
-    <LastModifiedBy>antonio.hernandez@altanredes.com</LastModifiedBy>
-    <ManifestVersion>SHA-512:fdd73815485221ed0fb0ff4608121208968e775b751a94036a7de674469af3276f3623ed7ff18d0bf000640c3a1bd6259efa2f68b9310a30a36198ea25db11c1:us-east-1</ManifestVersion>
+    <LastModifiedAt>1671750970997</LastModifiedAt>
+    <LastModifiedBy>ivan.pinav.b@altanredes.com</LastModifiedBy>
+    <ManifestVersion>SHA-512:fdd73815485221ed0fb0ff4608121208968e775b751a94036a7de674469af3276f3623ed7ff18d0bf000640c3a1bd6259efa2f68b9310a30a36198ea25db11c1</ManifestVersion>
     <Policies>
         <Policy>AM-RequestCoverage</Policy>
         <Policy>AM-RequestCoverageIsInternalCall</Policy>
