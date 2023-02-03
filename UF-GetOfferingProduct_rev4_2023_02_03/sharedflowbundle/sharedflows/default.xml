@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+    <Step>
+        <Name>FC-QueryPurchasedPrimaryOffering</Name>
+    </Step>
+    <Step>
+        <Name>JS-OfferingProduct</Name>
+    </Step>
+    <Step>
+        <Name>RF-ProductNotFound</Name>
+        <Condition>(verifyProduct == "false")</Condition>
+    </Step>
+</SharedFlow>

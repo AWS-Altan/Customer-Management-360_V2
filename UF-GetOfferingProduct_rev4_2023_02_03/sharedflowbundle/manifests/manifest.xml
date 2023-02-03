@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Manifest name="manifest">
+    <Policies>
+        <VersionInfo resourceName="FC-QueryPurchasedPrimaryOffering" version="SHA-512:322e7746e2aae94fb46b2df0dcabadeb56c0ead10016d6b398de2284c03036b60c9674b3259c65d9a4e6203f68db65397be7ac585c0db813e14e2fc2ff371542"/>
+        <VersionInfo resourceName="JS-OfferingProduct" version="SHA-512:a67a606f98d4c2f416b018dd580a8c47a9471704fc251ad04c7d7f63356ff2b3c4605897444f6fa7d90858826d4479c50fb90a8a32acf9ff793b6d022b34fae8"/>
+        <VersionInfo resourceName="RF-ProductNotFound" version="SHA-512:f4afb672e91efcd2510e2cecf527cf3334660cdcaebde31875d2de8cadc993f822a38511dfe575dbc450cde4089f8cb2266e3bfe3269739593ec5818433bf787"/>
+    </Policies>
+    <ProxyEndpoints/>
+    <Resources>
+        <VersionInfo resourceName="jsc://offeringProduct.js" version="SHA-512:4c779c45a21419b8580d8b613260bb0c8be9ca2643fdcafd22fc75447e81a307de67104ba6a8c9341169a36c46147838781dda40051af7d6f7c5b56692073c88"/>
+    </Resources>
+    <SharedFlows>
+        <VersionInfo resourceName="default" version="SHA-512:ac905ec76c5d73df469518fb274caffa8f7d2f776dfdcef0479a5cab45285034446bf0a62019c94c8a3a1d3f7c428a180b42148a03930a34dd13fdb52a04df3f"/>
+    </SharedFlows>
+    <TargetEndpoints/>
+</Manifest>
