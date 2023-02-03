@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+    <Step>
+        <Name>FC-GenerateSubTransactionId</Name>
+    </Step>
+    <Step>
+        <Name>JS-SetAuditorDataCoverage</Name>
+    </Step>
+    <Step>
+        <Name>AM-SetAuditorDataCoverageService</Name>
+    </Step>
+    <Step>
+        <Name>FC-AuditorService</Name>
+    </Step>
+    <Step>
+        <Name>AM-RequestCoverageIsInternalCall</Name>
+    </Step>
+    <Step>
+        <Name>SC-CoverageService</Name>
+    </Step>
+    <Step>
+        <Name>AM-SetAuditorDataCoverageServiceOut</Name>
+    </Step>
+    <Step>
+        <Name>FC-AuditorService</Name>
+    </Step>
+    <Step>
+        <Name>EV-ResponseCoverage</Name>
+    </Step>
+    <Step>
+        <Name>JS-AreBlocked</Name>
+    </Step>
+    <Step>
+        <Name>RF-BlockedCoordinates</Name>
+        <Condition>areBlocked = "true"</Condition>
+    </Step>
+    <Step>
+        <Name>RF-Serviceability</Name>
+        <Condition>responseCoverage.status.code = "500"</Condition>
+    </Step>
+    <Step>
+        <Name>JS-ValidateCoverage</Name>
+        <Condition>(excludeEBLKValidation!= "true")</Condition>
+    </Step>
+    <Step>
+        <Name>RF-ValidateCoverageLengthError</Name>
+        <Condition>(evalCoverage = "false") AND (code = "E-003")  OR (code = "E-008")</Condition>
+    </Step>
+    <Step>
+        <Name>RF-ValidateCoverage</Name>
+        <Condition>(serviceabilityVersion != "3") AND (evalCoverage = "false") AND (responseCoverage.status.code = "200") OR (responseCoverage.status.code = "400")</Condition>
+    </Step>
+    <Step>
+        <Name>RF-ValidateCoverageV3Serv</Name>
+        <Condition>(serviceabilityVersion == "3") AND (evalCoverage = "false") AND (responseCoverage.status.code = "200") OR (responseCoverage.status.code = "400")</Condition>
+    </Step>
+    <Step>
+        <Name>JS-SetErrorDescriptionIfIsSatellitalCoordinates</Name>
+    </Step>
+</SharedFlow>
