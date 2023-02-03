@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="GetDeviceInformation">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "IdentifierSubscriberError")</Condition>
+                <Name>AM-ErrorMessageIdentifierSubscriber</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError400")</Condition>
+                <Name>AM-ErrorMesaggeProfile400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ProfileError500")</Condition>
+                <Name>AM-ErrorMessageProfile500</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "HSSError")</Condition>
+                <Name>AM-ProfileHssError</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "PcrfHssError")</Condition>
+                <Name>AM-ErrorMessagePcrfHss</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "UpdateApn400")</Condition>
+                <Name>AM-ErrorMessageUpdateApn400</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError400")</Condition>
+                <Name>AM-ErrorMesaggeValidate400</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="allErrors">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(errorMessage.code = null)</Condition>
+            <Name>AM-ErrorMessageDefaultServer</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail != null)</Condition>
+            <Name>AM-ErrorMessageResponseDetail</Name>
+        </Step>
+        <Step>
+            <Condition>(errorMessage.detail = null)</Condition>
+            <Name>AM-ErrorMessageResponse</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-Request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="Device Information">
+            <Description>Recurso que muestra informacion del dispositivo</Description>
+            <Request>
+                <Step>
+                    <Name>AM-RequestDeviceInformation</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDataDeviceInformationIN</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>JS-EvaluateTargetResponse</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDataDeviceInformationOUT</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse400</Name>
+                    <Condition>response.status.code = "400"</Condition>
+                </Step>
+                <Step>
+                    <Name>JS-PrepareResponseImeiStatus</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/subscribers/getDeviceInformation") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <SSLInfo>
+            <Enabled>true</Enabled>
+        </SSLInfo>
+        <LoadBalancer>
+            <Algorithm>RoundRobin</Algorithm>
+            <Server name="LAMBDA-DEVICE_INFORMATION_1"/>
+            <Server name="LAMBDA-DEVICE_INFORMATION_2"/>
+            <MaxFailures>5</MaxFailures>
+            <ServerUnhealthyResponse>
+                <ResponseCode>500</ResponseCode>
+                <ResponseCode>502</ResponseCode>
+                <ResponseCode>504</ResponseCode>
+                <ResponseCode>503</ResponseCode>
+            </ServerUnhealthyResponse>
+        </LoadBalancer>
+        <Path>/prod/getdeviceinformation</Path>
+        <Properties>
+            <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
+        </Properties>
+    </HTTPTargetConnection>
+</TargetEndpoint>

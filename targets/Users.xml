@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="Users">
+    <Description/>
+    <FaultRules>
+        <FaultRule name="ControlledError1">
+            <Condition>(fault.name = "RaiseFault")</Condition>
+            <Step>
+                <Condition>(error.header.FaultHeader = "ValidateError204")</Condition>
+                <Name>AM-ErrorMesaggeValidate204</Name>
+            </Step>
+            <Step>
+                <Condition>(error.header.FaultHeader = "TargetError")</Condition>
+                <Name>AM-ErrorMessageTarget</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="SpikeArrestErrors">
+            <Condition>(fault.name Matches "SpikeArrestViolation") </Condition>
+            <Step>
+                <Name>AM-LimitCounting</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>SA-LimitCountingDefault</Name>
+            </Step>
+            <Step>
+                <Name>SA-LimitCountingCompany</Name>
+            </Step>
+            <Step>
+                <Name>EV-RequestIdentifyUser</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-AssignResponseVerb</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request>
+            <Step>
+                <Name>AM-SetTargetMDS</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PostFlow>
+    <Flows>
+        <Flow name="identifyUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestIdentifyUser</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorIdentifyUserIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorIdentifyUserOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/identify-user") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="defaultPassword">
+            <Description>Obtiene o fija el password por default</Description>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestDefaultPass</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDefaultPasswordIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorDefaultPasswordOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/mvno/{beid}/default-password") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="roleSearch">
+            <Description>Busqueda de roles por tipo</Description>
+            <Request>
+                <!-- <Step>
+                <Name>AM-BuildRequestGetRoles</Name>
+            </Step> -->
+                <Step>
+                    <Name>AM-BuildRequestGetRoles</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorRoleSearchIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorRoleSearchOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/roles/search") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="licencesMVNO">
+            <Description>Busqueda de roles por tipo</Description>
+            <Request>
+                <!-- <Step>
+                <Name>AM-BuildRequestGetRoles</Name>
+            </Step> -->
+                <Step>
+                    <Name>AM-BuildRequestGetLicences</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorLicencesMvnoIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorLicencesMvnoOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>RF-Response500</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/mvno/{PartnerId}/licences") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="resetPassword">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestResetPassword</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorResetPasswordIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorResetPasswordOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/reset-password") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="deleteUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestDeleteUser</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorDeleteUserIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorDeleteUserOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/unsubscribe") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="changeRole">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestChangeRole</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorChangeRoleIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorChangeRoleOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/change-role") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="addUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-BuildRequestAddUser</Name>
+                </Step>
+                <Step>
+                    <Name>FC-GenerateSubtransactionId</Name>
+                </Step>
+                <Step>
+                    <Name>AM-AuditorAddUserIn</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-AuditorAddUserOut</Name>
+                </Step>
+                <Step>
+                    <Name>JS-SetAuditorData</Name>
+                </Step>
+                <Step>
+                    <Name>FC-AuditorService</Name>
+                </Step>
+                <Step>
+                    <Name>EV-TargetResponse</Name>
+                    <Condition>response.status.code != "200" AND response.status.code != "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateResponse204</Name>
+                    <Condition>response.status.code = "204"</Condition>
+                </Step>
+                <Step>
+                    <Name>RF-ValidateTargetError</Name>
+                    <Condition>response.status.code = "500"</Condition>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/self-mng/users/subscribe") and (request.verb = "POST")</Condition>
+        </Flow>
+    </Flows>
+    <HTTPTargetConnection>
+        <!--LoadBalancer>
+            <Server name="PY-MS-360-USERS"/>
+        </LoadBalancer>
+        <Path>/py-ms-360-users/{flow.mds.operationpath}</Path-->
+        <Properties>
+            <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
+        </Properties>
+        <URL>https://tslfk16w84.execute-api.us-east-1.amazonaws.com/prod/{flow.mds.operationpath}</URL>
+    </HTTPTargetConnection>
+</TargetEndpoint>
