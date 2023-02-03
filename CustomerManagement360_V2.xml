@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="93" name="CustomerManagement360_V2">
+<APIProxy revision="2" name="CustomerManagement360_NewPolicyCounterIoT">
     <Basepaths>/cm</Basepaths>
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1580106205663</CreatedAt>
-    <CreatedBy>antonio.hernandez@altanredes.com</CreatedBy>
-    <Description>Cambio de cgi NV de rev Prod 91</Description>
+    <CreatedAt>1674836331857</CreatedAt>
+    <CreatedBy>contacto.portal@altanredes.com</CreatedBy>
+    <Description>Nuevo API Reset Password VMS, de rev prod 84</Description>
     <DisplayName>CustomerManagement 360</DisplayName>
-    <LastModifiedAt>1671224083634</LastModifiedAt>
+    <LastModifiedAt>1674836331857</LastModifiedAt>
     <LastModifiedBy>contacto.portal@altanredes.com</LastModifiedBy>
-    <ManifestVersion>SHA-512:6ec4fd974ca2877ba35d0a3156860a6d0c76cfbc99dd5cea55e86b7edbbbd7ca7f9477bbc129a55bcc3e52cb5eed1c33667da480e94a789a86a8bfa99b9fa228:us-east-1</ManifestVersion>
+    <ManifestVersion>SHA-512:16af3202246129275c5c6058991a9a598c87894b9f49e4a1df73f5db0755032f7bdaf2c8d5d8485f712ee4c43d9afb36fa2b1db3fce7d09706ad3bdb22b51e20:us-west-2</ManifestVersion>
     <Policies>
         <Policy>AC-SecurityIP</Policy>
         <Policy>AE-GetAppInfo</Policy>
