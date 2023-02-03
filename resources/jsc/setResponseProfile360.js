@@ -8,11 +8,28 @@ var responsePromotionBonus = context.getVariable("responseCheckPromotionBonus.co
 var bonos = JSON.parse(responsePromotionBonus);
 var offersCNBCN = [];
 
+var selfMngLifeCycle = context.getVariable("selfMngLifeCycle");
+var selfMngLifeCycle = (typeof(selfMngLifeCycle) !== undefined && selfMngLifeCycle!== null && selfMngLifeCycle!== "")?selfMngLifeCycle:'false';
+//var status= responseJSON.subscriber.status.status;
+
 var statusCode = context.getVariable("responseCheckPromotionBonus.status.code");
 print("statusCode: "+ statusCode);
 
 var isValidResponse = context.getVariable('isValidResponse');
 print("isValidResponse: "+ isValidResponse);
+
+if(selfMngLifeCycle == 'true'){
+    responseJSON.subscriber.status = {
+        status : responseJSON.subscriber.status.status,
+        reason : responseJSON.subscriber.status.reason,
+        subReason : responseJSON.subscriber.status.subReason
+    }
+}else{
+    responseJSON.subscriber.status = {
+        status : responseJSON.subscriber.status.status,
+        reason : responseJSON.subscriber.status.reason
+    }
+}
 
 if(isValidResponse == "false"){
     bonos = "";

@@ -434,12 +434,12 @@
     </Flows>
     <HTTPTargetConnection>
         <LoadBalancer>
-            <Server name="PY-MS-SUBSCRIBER"/>
+            <Server name="PY-MS-SUBSCRIBER-DEV"/>
             <!--Server name="PY-MS-SUBSCRIBER_2"/> -->
             <!--<Server name="PY-MS-SUBSCRIBER-FROM-RXPX"/> SERVER DE RESERVA -->
         </LoadBalancer>
-        <Path>/prod/{flow.mds.operationpath}</Path>
-        <!--<Path>/{flow.mds.operationpath}</Path> PATH DE RESERVA -->
+        <!--<Path>/prod/{flow.mds.operationpath}</Path>-->
+        <Path>/{flow.mds.operationpath}</Path>
         <Properties>
             <Property name="success.codes">1xx,2xx,3xx,4xx,5xx</Property>
         </Properties>

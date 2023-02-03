@@ -1631,7 +1631,7 @@
         </Flow>
     </Flows>
     <HTTPProxyConnection>
-        <BasePath>/cm-360/v1</BasePath>
+        <BasePath>/cm-360-pocoiot/v1</BasePath>
         <Properties/>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
