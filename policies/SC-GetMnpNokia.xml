@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="SC-GetMnpNokia">
+    <DisplayName>SC-GetMnpNokia</DisplayName>
+    <Properties/>
+    <Request variable="requestMnpNokia"/>
+    <Response>responseMnpNokia</Response>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="HSS_APIGW"/>
+        </LoadBalancer>
+        <Path>/prod/ProvisioningGateway/services/SPMLALTANMEXSubscriber10Service</Path>
+    </HTTPTargetConnection>
+</ServiceCallout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="true" continueOnError="true" enabled="true" name="SC-GetLastUpdatedAPN">
+    <DisplayName>SC-GetLastUpdatedAPN</DisplayName>
+    <Properties>
+        <Property name="success.codes">2XX,4XX,5XX</Property>
+    </Properties>
+    <Request variable="requestGetLastUpdatedAPN"/>
+    <Response>responseGetLastUpdatedAPN</Response>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="APN"/>
+        </LoadBalancer>
+        <Path>/prod/control_adicional_envioapn</Path>
+    </HTTPTargetConnection>
+</ServiceCallout>

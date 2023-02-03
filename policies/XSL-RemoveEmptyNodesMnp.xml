@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XSL async="false" continueOnError="false" enabled="true" name="XSL-RemoveEmptyNodesMnp">
+    <DisplayName>XSL-RemoveEmptyNodesMnp</DisplayName>
+    <Properties/>
+    <Source>requestMnpNokia</Source>
+    <ResourceURL>xsl://QuitarNodosVacios.xsl</ResourceURL>
+    <Parameters ignoreUnresolvedVariables="true"/>
+    <OutputVariable/>
+</XSL>
